@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" >
+    
+    <appender name="infoConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%blue(%-5level) [%-20.30logger{0}]: %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter> 
+    </appender>
+    
+    <appender name="debugConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%magenta(%-5level) [%-20.30logger{0}]: %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter> 
+    </appender>
+    
+    <appender name="warnConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%yellow(%-5level) [%-20.30logger{0}]: %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter> 
+    </appender>
+    
+    <appender name="errorConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%red(%-5level) [%-20.30logger{0}]: %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter> 
+    </appender>
+    
+    <logger name="org.hibernate" level="WARN" />
+   
+    <root level="DEBUG">
+        <appender-ref ref="infoConsoleAppender" />
+        <appender-ref ref="debugConsoleAppender" />
+        <appender-ref ref="warnConsoleAppender" />
+        <appender-ref ref="errorConsoleAppender" />
+    </root>
+       
+</configuration>
+
