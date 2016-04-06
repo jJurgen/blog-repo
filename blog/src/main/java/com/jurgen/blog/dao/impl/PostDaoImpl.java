@@ -4,91 +4,74 @@ import com.jurgen.blog.dao.PostDao;
 import com.jurgen.blog.domain.Post;
 import com.jurgen.blog.domain.User;
 import java.util.List;
-import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component("postDao")
 public class PostDaoImpl extends GenericDaoImpl<Post, Integer> implements PostDao {
-    
+
     private static Logger logger = LoggerFactory.getLogger(PostDaoImpl.class);
-    
+
     @Override
     public List<Post> getUsersPosts(User user) {
+        Query query = getCurrentSession().createQuery("from Post where author = :author");
+        query.setParameter("author", user);
+        List<Post> posts = query.list();
         if (user != null) {
-            List<Post> posts = getCurrentSession().createCriteria(type).add(Restrictions.eq("author", user)).list();
-            if (posts != null) {
-                logger.debug("All posts of user: " + user.getUsername() + " obtained. Count: " + posts.size());
-            }
-            return posts;
+            logger.debug("All posts of user: " + user.getUsername() + " obtained. Count: " + posts.size());
         }
-        return null;
+        return posts;
     }
-    
+
     @Override
     public List<Post> getRecentPosts(int amount) {
-        Criteria c = getCurrentSession().createCriteria(type);
-        c.addOrder(Order.desc("postDate"));
-        c.addOrder(Order.asc("content"));
-        c.setMaxResults(amount);
-        List<Post> posts = c.list();
-        if (posts != null) {
-            logger.debug("Recent posts obtained. Count: " + posts.size());
-        }
+        Query query = getCurrentSession().createQuery("from Post order by postDate");
+        query.setMaxResults(amount);
+        List<Post> posts = query.list();
+        logger.debug("Recent posts obtained. Count: " + posts.size());
         return posts;
     }
-    
+
     @Override
     public List<Post> searchByTitle(String req) {
-        Criteria c = getCurrentSession().createCriteria(type);
-        c.add(Restrictions.like("title", req, MatchMode.ANYWHERE).ignoreCase());
-        List<Post> posts = c.list();
-        if (posts != null) {
-            logger.debug("Obtained " + posts.size() + " posts which was found by title: " + req);
-        }
+        Query query = getCurrentSession().createQuery("from Post where lower(title) like :request");
+        query.setParameter("request", '%' + req.toLowerCase() + '%');
+        List<Post> posts = query.list();
+        logger.debug("Obtained " + posts.size() + " posts which was found by title: " + req);
         return posts;
     }
-    
+
     @Override
-    public List<Post> searchByContent(String req) {
-        Criteria c = getCurrentSession().createCriteria(type);
-        c.add(Restrictions.like("content", req, MatchMode.ANYWHERE).ignoreCase());
-        List<Post> posts = c.list();
-        if (posts != null) {
-            logger.debug("Obtained " + posts.size() + " posts which was found by content: " + req);
-        }
+    public List<Post> searchByContent(String request) {
+        Query query = getCurrentSession().createQuery("from Post where lower(content) like :request");
+        query.setParameter("request", '%' + request.toLowerCase() + '%');
+        List<Post> posts = query.list();
+        logger.debug("Obtained " + posts.size() + " posts which was found by content: " + request);
         return posts;
     }
-    
+
     @Override
-    public List<Post> searchByAuthor(String req) {
-        Criteria c = getCurrentSession().createCriteria(type, "post");
-        c.createAlias("post.author", "auth");
-        c.add(Restrictions.like("auth.username", req, MatchMode.ANYWHERE).ignoreCase());
-        List<Post> posts = c.list();
-        if (posts != null) {
-            logger.debug("Obtained " + posts.size() + " posts which was found by author: " + req);
-        }
+    public List<Post> searchByAuthor(String request) {
+        Query query = getCurrentSession().createQuery("from Post where lower(author.username) like :request");
+        query.setParameter("request", '%' + request.toLowerCase() + '%');
+        List<Post> posts = query.list();
+        logger.debug("Obtained " + posts.size() + " posts which was found by author: " + request);
         return posts;
     }
-    
+
     @Override
-    public List<Post> searchByComments(String req) {
-        Criteria c = getCurrentSession().createCriteria(type, "post");
-        c.createCriteria("comments", "comm");
-        c.add(Restrictions.like("comm.content", req, MatchMode.ANYWHERE).ignoreCase());
-        List<Post> posts = c.list();
-        if (posts != null) {
-            logger.debug("Obtained " + posts.size() + " posts which was found by comments: " + req);
-        }
+    public List<Post> searchByComments(String request) {
+        String hqlQuery = "from Post as post LEFT JOIN FETCH post.comments as comment where lower(comment.content) like :request";
+        Query query = getCurrentSession().createQuery(hqlQuery);
+        query.setParameter("request", '%' + request.toLowerCase() + '%');
+        List<Post> posts = query.list();
+        logger.debug("Obtained " + posts.size() + " posts which was found by comments: " + request);
         return posts;
     }
-    
+
     @Override
     public Post getPostWithJoins(Integer id) {
         Post post = get(id);
@@ -98,5 +81,5 @@ public class PostDaoImpl extends GenericDaoImpl<Post, Integer> implements PostDa
         }
         return post;
     }
-    
+
 }

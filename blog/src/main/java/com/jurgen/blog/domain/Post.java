@@ -2,7 +2,6 @@ package com.jurgen.blog.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -16,8 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "posts")
@@ -40,7 +37,6 @@ public class Post implements Serializable {
     private User author;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    //@LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments = new LinkedList<>();
 
     public Post() {

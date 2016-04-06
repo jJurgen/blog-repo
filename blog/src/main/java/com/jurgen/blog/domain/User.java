@@ -50,7 +50,6 @@ public class User implements UserDetails {
     private Date regDate;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    //  @LazyCollection(LazyCollectionOption.FALSE)
     private List<Post> posts = new LinkedList<>();
 
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -60,7 +59,6 @@ public class User implements UserDetails {
     private Set<UserRole> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    //  @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments = new LinkedList<>();
 
     public User() {

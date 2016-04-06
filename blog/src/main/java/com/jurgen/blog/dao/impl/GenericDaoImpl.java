@@ -7,11 +7,9 @@ import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -32,20 +30,17 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
     @Override
     public PK create(T object) {
-        PK pk = null;
-        try {
-            pk = (PK) getCurrentSession().save(object);
-        } catch (DataIntegrityViolationException ex) {
-            logger.warn("Can't create entity:" + type.getSimpleName() + ". Message:" + ex.getMessage());
-        }
+        PK pk = (PK) getCurrentSession().save(object);
         logger.debug("Type of entity: " + type.getSimpleName() + ". Object with primary key: " + pk + " created");
         return pk;
     }
 
     @Override
     public T get(PK id) {
-        T result = (T) getCurrentSession().createCriteria(type).add(Restrictions.idEq(id)).uniqueResult();
-        if (result != null) {
+        T result = (T) getCurrentSession().get(type, id);
+        if (result == null) {
+            logger.debug(String.format("Type of entity: %s with key: %s doesn't exist", type.getSimpleName(), id));
+        } else {
             logger.debug(String.format("Type of entity: %s obtained from db. Primary key: %s", type.getSimpleName(), id));
         }
         return result;
@@ -67,8 +62,11 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
     @Override
     public List<T> getAll() {
         List<T> results = getCurrentSession().createCriteria(type).list();
-        if(results != null) logger.debug(String.format("Type of entity: %s. Obtained all from db. Count: %s", type.getSimpleName(), results.size()));
-        else logger.debug(String.format("Type of entity: %s. Obtained null instead of all elements", type.getSimpleName()));
+        if (results != null) {
+            logger.debug(String.format("Type of entity: %s. Obtained all from db. Count: %s", type.getSimpleName(), results.size()));
+        } else {
+            logger.debug(String.format("Type of entity: %s. Obtained null instead of all elements", type.getSimpleName()));
+        }
         return results;
     }
 

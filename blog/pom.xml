@@ -12,7 +12,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring.version>4.2.1.RELEASE</spring.version>
+        <spring.version>4.0.2.RELEASE</spring.version>
         <hibernate.version>4.3.11.Final</hibernate.version>
         <spring.security.version>4.0.2.RELEASE</spring.security.version>
         <hibernate.validator.version>5.1.1.Final</hibernate.validator.version>
@@ -143,7 +143,8 @@
                 <configuration>
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
                 </configuration>
-            </plugin>                
+            </plugin> 
+                           
         </plugins>
     </build>
     
