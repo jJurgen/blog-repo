@@ -7,6 +7,11 @@
 body {
     font-family: Times New Roman;
     font-size: 14px;
+
+}
+
+pre{
+    white-space: pre-wrap;
 }
 
 #container {
@@ -105,11 +110,35 @@ body {
 
 #content {
     padding-top: 10px;
-    min-height: 450px;
-    height: auto;
-    background: #FFFFFF;
+    min-height: 500px;
+
     border-right: 3px solid #CCCECD;
     border-left: 3px solid #CCCECD;
+}
+
+#content .paginationBlock{
+    margin: 5px auto;
+    width:auto;
+    height: auto;
+
+    text-align: center;
+}
+
+#content .paginationBlock a{
+    display: inline-block;
+    
+    padding: 3px 7px;
+    
+    font-size: 15px;
+        
+    color: black;
+    text-decoration: none;
+    font-family: Arial;
+        
+}
+
+#content .paginationBlock a:hover{
+    text-decoration: underline;
 }
 
 #clear {
@@ -128,102 +157,6 @@ body {
     font-style: italic;
 }
 
-#signInForm {
-    margin: 200px auto;
-    padding: 0 25px 0;
-    width: 280px;
-    background: #ABABAB;
-    border: 2px solid #353C38;
-    border-radius: 8px;
-    font: 14px / 18px Arial, Tahoma, sans-serif;
-    color: #444;
-}
-
-#signInForm .field {
-    margin: 5px 0 10px;
-}
-
-#signInForm .field label {
-    display: block;
-    margin: 0 0 5px;
-}
-
-#signInForm .field input {
-    font: 12px Arial, Tahoma, sans-serif;
-    color: #444;
-    width: 270px;
-    padding: 4px 4px;
-    border: 1px solid #D2D9DC;
-    border-radius: 3px;
-    outline: none;
-}
-
-#signInForm .field input:focus {
-    border-color: #353C38;
-}
-
-#signInForm .submit {
-    height: auto;
-    padding: 10px 35px;
-    margin: 0 -25px 0 -25px;
-    background: #5F6D66;
-    border-top: 1px solid #353C38;
-    border-radius: 0 0 8px 8px;
-    font-size: 11px;
-    color: #D0C9C9;
-}
-
-#signInForm .submit .remember {
-    display: block;
-    margin: 5px 0 0;
-    font-size: 12px;
-    cursor: pointer;
-}
-
-#signInForm .errorMessage {
-    display: block;
-    font-style: italic;
-    font-size: 12px;
-    color: #D41120;
-}
-
-#signInForm .submit .remember input {
-    margin: 0 4px 0 0;
-    vertical-align: middle;
-}
-
-#signInForm .submit .regButton {
-    margin: 0 0 0 100px;
-    border: 1px solid #080808;
-    background: #BAC0C3;
-    padding: 3px 6px;
-    color: #000;
-    font-size: 16px;
-    font-family: helvetica, serif;
-}
-
-#signInForm .submit .signInButton {
-    float: right;
-    border: 1px solid #080808;
-    background: #BAC0C3;
-    color: #000;
-    font-size: 15px;
-    height: 25px;
-    width: 70px;
-    text-align: center;
-}
-
-#signInForm .submit button:hover {
-    border: 1px solid #000000;
-    background: #97999A;
-    color: #FFF;
-    cursor: pointer;
-}
-
-#signInForm .submit button:active {
-    border: 1px solid #000000;
-}
-
 #blogContainer {
     width: 600px;
     height: auto;
@@ -232,9 +165,11 @@ body {
 
 #blogContainer .content_title {
     width: 100%;
-    text-align: center;
     margin: auto;
+
     font-size: 20px;
+
+    text-align: center;
 }
 
 #blogContainer .postPreview {
@@ -252,18 +187,45 @@ body {
     text-decoration: underline;
 }
 
-#blogContainer .postPreview .author {
-    text-align: left;
-    margin: 0 0 0 20px;
+#blogContainer .postPreview .meta {
+    margin: 5px 0 0 25px;
     font-size: 14px;
+}
+
+#blogContainer .postPreview .meta form{    
+    display: inline-block;
+}
+
+#blogContainer .postPreview .meta button{
+    display: block;
+    width: 80px;
+    height: 20px;
+
+    border-radius: 1px;
+    border: 1px solid #a9a9c7;
+    font-size: 14px;    
+
+    color: #555;
+    background: #b5d6e6;
+    cursor: pointer;
+    outline: none;
+}
+
+#blogContainer .postPreview .meta button:hover{
+    background: #72bbe0;
+    color: snow;
 }
 
 #blogContainer .postPreview .title {
     display: block;
-    margin: 0 10px 0 20px;
+    width: 100%;
+    margin: 0 10px 0 0px;
+
     font-size: 22px;
+
     font-style: italic;
     word-wrap: break-word;
+    text-align: center;
 }
 
 #blogContainer .postPreview .content {
@@ -280,26 +242,20 @@ body {
     font-size: 12px;
 }
 
-#searchContainer {
-    width: 600px;
-    height: auto;
-    margin: auto;
-}
 
-#paramsContainer {
-    width: 100%;
-    height: auto;
-    padding: 10px 0;
-}
+
+
 
 #searchForm {
     width: 450px;
     height: auto;
     margin: auto;
     padding: 10px 20px;
-    background: #C4C2C2;
-    border: 1px solid #000000;
+
+    border: 1px solid #B7C7F5;
     border-radius: 3px;
+
+    background: lavender;
 }
 
 #searchForm .title {
@@ -333,32 +289,36 @@ body {
     margin-top: 10px;
 }
 
-#searchForm .submit .field {
+#searchForm .submit input {
     float: left;
-    border: 1px solid #000000;
     width: 340px;
     height: 23px;
+
+    border: 1px solid #B7C7F5;
 }
 
 #searchForm .submit button {
-    border: 1px solid #080808;
-    background: #BAC0C3;
-    color: #000;
-    font-size: 14px;
+    display: block;
+    width: 80px;
     height: 23px;
-    padding: 0px 10px;
+
+    border-radius: 1px;
+    border: 1px solid #a9a9c7;
+    font-size: 14px;    
+
+    color: #555;
+    background: #b5d6e6;
+    cursor: pointer;
+    outline: none;
 }
 
 #searchForm .submit button:hover {
-    border: 1px solid #000000;
-    background: #97999A;
-    color: #FFF;
+    background: #72bbe0;
+    color: snow;
     cursor: pointer;
 }
 
-#searchForm .submit button:active {
-    border: 1px solid #000000;
-}
+
 
 #resultsContainer {
     width: 100%;
@@ -461,19 +421,17 @@ body {
     padding: 5px 5px;
 }
 
+
+
 #writePostForm {
     margin: auto;
-    width: 490px;
+    width: 710px;
     height: auto;
-    padding: 0px 0px 0px 10px;
-    border: 1px solid #000;
-    background: #A8AAA3;
-    border-radius: 3px;
+
 }
 
-#writePostForm .title {
-    margin: 5px 0;
-    font-size: 20px;
+#writePostForm .title {    
+    font-size: 18px;
     font-style: italic;
     display: block;
     text-align: center;
@@ -481,27 +439,28 @@ body {
 
 #writePostForm .inputTitle {
     margin: 5px 0;
-    font-size: 18px;
+    font-size: 16px;
     font-style: normal;
     display: block;
 }
 
 #writePostForm .titleTextArea {
-    width: 480px;
-    height: 35px;
-    padding: 4px;
-    font-family: Tahoma, sans-serif;
-    font-size: 18px;
-    border: 1px solid #000;
+    width: 700px;
+    height: 65px;
+    padding: 5px;
+
+    border: 1px solid #9C9696;
+    border-radius: 3px;
+    font-size: 16px;
 }
 
 #writePostForm .contentTextArea {
-    width: 480px;
-    height: 80px;
+    width: 700px;
+    height: 300px;
     padding: 5px;
-    font-family: Tahoma, sans-serif;
+
     font-size: 14px;
-    border: 1px solid #000;
+    border: 1px solid #9C9696;
 }
 
 #writePostForm .errorMessage {
@@ -511,42 +470,55 @@ body {
 }
 
 #writePostForm button {
-    padding: 3px 6px;
-    border: 1px solid #080808;
-    background: #BAC0C3;
-    color: #000;
-    font-size: 14px;
+    display: block;    
+    width: 80px;
+    height: 25px;
+
+    border-radius: 1px;
+    border: 1px solid #a9a9c7;
+    font-size: 16px;    
+
+    color: #555;
+    background: #b5d6e6;
+    cursor: pointer;
+    outline: none;
 }
 
 #writePostForm button:hover {
-    border: 1px solid #000000;
-    background: #97999A;
-    color: #FFF;
-    cursor: pointer;
+    background: #72bbe0;
+    color: snow;
 }
 
-#writePostForm button:active {
-    border: 1px solid #000000;
-}
 
 #userInfo {
-    width: 550px;
+    width: 450px;
     height: auto;
     margin: auto;
-    padding: 10px 10px 0px 10px;
-    background: #DDDDDD;
-    border: 1px solid #6A6A6A;
+    padding: 10px 10px 2px 10px;
+
+    border: 3px double #9C9696;
     border-radius: 3px;
+
+    color: #454545;
 }
 
 #userInfo .field {
     display: block;
-    font-size: 18px;
+    font-size: 16px;
     margin: 3px;
 }
 
+#userInfo .centerField {    
+    display: block;    
+    margin: 3px;
+
+    font-size: 16px;
+
+    text-align: center;
+}
+
 #userInfo .aboutArea {
-    width: 480px;
+    width: 100%;
     height: 60px;
     padding: 3px;
     font-family: Tahoma, sans-serif;
@@ -554,28 +526,32 @@ body {
 }
 
 #userInfo button {
-    padding: 3px 6px;
-    border: 1px solid #080808;
-    background: #BAC0C3;
-    color: #000;
-    font-size: 15px;
-    display: block;
+    display: block;    
+    width: 100px;
+    height: 25px;    
+
+    border-radius: 1px;
+    border: 1px solid #a9a9c7;
+    font-size: 16px;    
+
+    color: #555;
+    background: #b5d6e6;
+    cursor: pointer;
+    outline: none;
 }
 
 #userInfo button:hover {
-    border: 1px solid #000000;
-    background: #97999A;
-    color: #FFF;
-    cursor: pointer;
+    background: #72bbe0;
+    color: snow;
 }
 
-#userInfo button:active {
-    border: 1px solid #000000;
-}
+
 
 #postContainer {
-    width: 550px;
+    width: 700px;
     height: auto;
+
+    margin: auto;
     padding: 20px;
 }
 
@@ -598,6 +574,7 @@ body {
 #postContainer .postDate {
     float: right;
     width: auto;
+
     font-size: 14px;
 }
 
@@ -605,7 +582,7 @@ body {
     float: left;
     width: 100%;
     height: auto;
-    font-size: 26px;
+    font-size: 20px;
     word-wrap: break-word;
     text-align: center;
 }
@@ -614,132 +591,153 @@ body {
     float: right;
     width: 100%;
     height: auto;
-    font-size: 18px;
-    word-wrap: break-word;
+    font-size: 15px;
+    word-wrap:break-word;
+    margin: 10px 0px;    
+}
+
+#postContainer .removeForm{
+    float: right;
+}
+
+#postContainer .afterPostInfo{
+    margin: 5px 0px;
+
+    font-size: 15px; 
+    font-style: italic;
+}
+
+#commentContainer{
+    width: 700px;
+    height: auto;
+
+    margin: auto;
+    padding: 0px 20px;
+
+}
+
+#commentContainer .addCommentForm {
+    width: 100%;   
+    height: auto;
     margin: 10px 0px;
-}
-
-#postContainer .commentContainer {
-    width: 500px;
-    height: auto;
-    margin: 8px 5px;
-    background: #D1CAC2;
-    border: 1px solid #000;
-    border-radius: 2px;
     display: inline-block;
-}
 
-#postContainer .commentContainer .header {
-    width: 100%;
-    height: 20px;
-    border-bottom: 0px solid #FFF;
-    background: #B3B3B3;
-}
-
-#postContainer .commentContainer .header .author {
-    float: left;
-    width: 200px;
-    margin: 3px 0 0 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 0px;
-}
-
-#postContainer .commentContainer .header .date {
-    float: right;
-    padding: 0;
-    margin: 3px 5px 0 0;
-}
-
-#postContainer .commentContainer .content {
-    width: 95%;
-    padding: 5px;
-    font-size: 16px;
-    word-wrap: break-word;
-    margin-left: 10px;
-    text-align: left;
-}
-
-#postContainer .commentsTitle {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    font-size: 20px;
-    font-style: italic;
-    width: 100%;
-}
-
-#postContainer .removeForm {
-    float: right;
-}
-
-#postContainer .removeForm button {
-    border: 1px solid #080808;
-    background: #BAC0C3;
-    color: #000;
-    font-size: 15px;
-}
-
-#postContainer .removeForm button:hover {
-    border: 1px solid #000000;
-    background: #97999A;
-    color: #FFF;
-    cursor: pointer;
-}
-
-#postContainer .removeForm button:active {
-    border: 1px solid #000000;
-}
-
-#postContainer .addCommentForm {
-    margin: 0px;
-    width: 500px;
-    height: auto;
-    padding: 5px;
-    background: #ABABAB;
-    border: 1px solid #000;
     border-radius: 3px;
+    border: 1px solid #B7C7F5;
+
+    background: lavender;
 }
 
-#postContainer .addCommentForm .title {
-    font-size: 18px;
-    font-style: italic;
+#commentContainer .addCommentForm .avatarBlock{
+    float: left;
+    width: 70px;
+    height: 70px;    
 }
 
-#postContainer .addCommentForm .errorMessage {
-    display: block;
-    font-size: 14px;
-    color: #E92020;
-}
-
-#postContainer .addCommentForm .commentTextArea {
-    width: 500px;
-    height: 80px;
+#commentContainer .addCommentForm .avatarBlock img{
     padding: 5px;
-    font-family: Tahoma, sans-serif;
-    font-size: 14px;
-    border: 1px solid #858080;
+    width: 60px;
+    height: 60px;
 }
 
-#postContainer .addCommentForm button {
-    padding: 3px 6px;
-    border: 1px solid #080808;
-    background: #BAC0C3;
-    color: #000;
-    font-size: 15px;
+#commentContainer .addCommentForm textarea{
+    display: block;
+    width: 625px;
+    height: 60px;        
+    margin: 5px 0px 0px 70px;
+    padding: 5px;
+
+    border: 1px solid gainsboro;    
+    font-size: 12px;
 }
 
-#postContainer .addCommentForm button:hover {
-    border: 1px solid #000000;
-    background: #97999A;
-    color: #FFF;
+#commentContainer .addCommentForm button{
+    display: block;
+    margin-left: 70px;
+    width: 80px;
+    height: 25px;
+
+    border-radius: 1px;
+    border: 1px solid #a9a9c7;
+    font-size: 16px;    
+
+    color: #555;
+    background: #b5d6e6;
     cursor: pointer;
+    outline: none;
 }
 
-#postContainer .addCommentForm button:active {
-    border: 1px solid #000000;
+#commentContainer .addCommentForm button:hover{
+    background: #72bbe0;
+    color: snow;
 }
+
+
+#commentContainer .title{
+    width: 100%;
+    border-bottom: 2px solid  #CCCECD;
+
+    font-size: 20px;
+}
+
+#commentContainer .commentArea{
+    display: inline-block;
+    margin: 10px 0px;
+    height: auto;
+
+    border: 1px solid #CCCECD;   
+
+    background: #F1F2F9;
+}
+
+#commentContainer .commentArea .avatarBlock{
+    float: left;
+    width: 70px;
+    height: 70px;
+}
+
+#commentContainer .commentArea .avatarBlock img{
+    padding: 5px;
+    width: 60px;
+    height: 60px;
+}
+#commentContainer .commentArea .commentBlock{
+    margin-left: 70px;
+    width: 630px;
+
+}
+
+#commentContainer .commentArea .commentBlock .meta{
+    width: 100%;
+    margin-top: 5px;   
+
+    font-size: 14px;
+}
+
+#commentContainer .commentArea .commentBlock .meta a{
+    font-weight: bold;
+    color: #027061;
+    text-decoration: none;
+}
+
+#commentContainer .commentArea .commentBlock .meta a:hover{
+    text-decoration: underline;
+}
+
+#commentContainer .commentArea .commentBlock .content{
+    margin: 5px 0px;
+    width: 100%;
+    height: auto;    
+
+    font-size: 15px;    
+
+    word-wrap: break-word;
+}
+
+#commentContainer .commentArea .removeForm{
+    float:right;
+}
+
 
 #adminContentTitle {
     font-size: 20px;

@@ -1,4 +1,4 @@
-package com.jurgen.blog.sevice;
+package com.jurgen.blog.service;
 
 import com.jurgen.blog.dao.RoleDao;
 import com.jurgen.blog.dao.UserDao;
@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
         return false;
     }
     
-    public void removeUser(Integer userId) {
+    public void removeUser(Long userId) {
         User user = userDao.get(userId);
         if (user != null) {
             userDao.delete(user);

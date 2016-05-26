@@ -6,6 +6,6 @@ import com.jurgen.blog.domain.Comment;
 import org.springframework.stereotype.Component;
 
 @Component("commentDao")
-public class CommentDaoImpl extends GenericDaoImpl<Comment, Integer> implements CommentDao{
+public class CommentDaoImpl extends GenericDaoImpl<Comment, Long> implements CommentDao{
     
 }

@@ -20,7 +20,7 @@ public class UserRole implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false, length = 20)
     private String role;
@@ -54,11 +54,16 @@ public class UserRole implements Serializable {
         return hash;
     }
 
-    public int getId() {
+    @Override
+    public String toString() {
+        return String.format("[role: role=%s]", role);
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

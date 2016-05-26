@@ -9,139 +9,91 @@
 </head>
 <body>
     <div id="container">
-        <div id="header">
-            <div id="headerNavigationPanel">
-                <sec:authorize access="isAuthenticated()">
-                    <sec:authentication property="principal.username" var="username"/>
-                    <label>
-                        <c:out value="Hello, ${username}"/>
-                        <a href="<c:url value="/logout"/>">(sign out)</a>
-                    </label>
-                </sec:authorize>
-                <sec:authorize access="isAnonymous()">
-                    <label>
-                        <c:out value="Hello! You aren't authorized." />
-                    </label>
-                    <label>
-                        <c:out value="Would you like to" />
-                        <a href="<c:url value="/signIn"/>"><c:out value="sign in"/></a>
-                        <c:out value="?" />
-                    </label>
-                    <label>
-                        <c:out value="If you haven't got an account - " />
-                        <a href="<c:url value="/signUp"/>"><c:out value="sign up"/></a>
-                        <c:out value="!" />
-                    </label>
-                </sec:authorize>    
-            </div>
-            <a href="<c:url value="/home"/>">
-                <div id="headerBannerPanel">
-                </div>
-            </a>
-        </div>
 
-        <div id="navigation">
-            <form action="<c:url value="/home"/>">
-                <button type="submit">Home</button>
-            </form>
-            <form action="<c:url value="/writepost"/>">
-                <button type="submit">Write Post</button>
-            </form>
-            <form action="<c:url value="/profile"/>">
-                <button type="submit">Profile</button>
-            </form>
-            <form action="<c:url value="/search"/>">
-                <button type="submit">Search</button>
-            </form>
-            <form action="signUp">
-                <button type="submit">Sign Up</button>
-            </form>
-
-        </div>
+        <%@include file="parts/header.jsp" %>
+        <%@include file="parts/navigation.jsp" %>
 
         <div id="content">
-            <div id="blogContainer">
-                <div id="postContainer">
-                    <c:if test="${not empty post}">
-                        <div class="authorField">
-                            <c:out value="Author:"/>						
-                            <a class="nickname" href="<c:url value="profile=${post.author.username}" />"><c:out value="${post.author.username}"/></a>
+            <div id="postContainer">
+                <c:if test="${not empty post}">
+                    <div class="authorField">
+                        <c:out value="Author:"/>						
+                        <a class="nickname" href="<c:url value="profile=${post.author.username}" />"><c:out value="${post.author.username}"/></a>
+                    </div>
+                    <div class="postDate">
+                        <c:out value="${post.postDate}" />
+                    </div>
+                    <div class="postTitle">
+                        <c:out value="${post.title}" />
+                    </div>
+                    <div class="postContent">
+                        <pre><c:out value="${post.content}"/></pre>
+                    </div>
+                    <sec:authorize access="hasRole('ROLE_MODER')">
+                        <form class="removeForm" action="removePost" method="POST">
+                            <input type="hidden" name="postId" value="<c:out value="${post.id}"/>">
+                            <button type="submit">remove</button>
+                        </form>
+                    </sec:authorize>
+
+                    <sec:authorize access="isAnonymous()">
+                        <div class="afterPostInfo">
+                            <label>* if you want to write a comment - please sign in</label>
                         </div>
-                        <div class="postDate">
-                            <c:out value="${post.postDate}" />
+                    </sec:authorize>
+
+                </c:if>
+            </div>
+
+
+            <div id="commentContainer">
+
+                <sec:authorize access="isAuthenticated()">
+                    <form:form cssClass="addCommentForm" action="addComment" modelAttribute="addCommentFormBean" method="POST">
+                        <div class="avatarBlock">
+                            <img src="resources/img/defaultAvatar.png" >
                         </div>
-                        <div class="postTitle">
-                            <c:out value="${post.title}" />
+                        <textarea name="comment" maxlength="500" placeholder="Write comment..."></textarea>
+                        <input type="hidden" name="postId" value="<c:out value="${post.id}"/>">
+                        <button type="submit">Write</button>
+                    </form:form>
+                </sec:authorize>
+                <div class="title">
+                    <label class="commentsTitle">Comments:</label>
+                </div>
+
+                <c:forEach var="comment" items="${post.comments}">
+                    <div class="commentArea">
+
+                        <div class="avatarBlock">
+                            <img src="resources/img/defaultAvatar.png" >
                         </div>
-                        <div class="postContent">
-                            <c:out value="${post.content}"/>
+
+                        <div class="commentBlock">
+                            <div class="meta">
+                                <a href="<c:url value="profile=${comment.author.username}"/>"><c:out value="${comment.author.username}"/></a>
+                                <c:out value=", ${comment.commentDate}" />
+                            </div>
+                            <div class="content">
+                                <c:out value="${comment.content}"/>
+                            </div>                                
                         </div>
+
                         <sec:authorize access="hasRole('ROLE_MODER')">
-                            <form class="removeForm" action="removePost" method="POST">
-                                <input type="hidden" name="postId" value="<c:out value="${post.id}"/>">
-                                <button type="submit">delete</button>
+                            <form class="removeForm" action="removeComment" method="POST">
+                                <input type="hidden" name="commentId" value="<c:out value="${comment.id}"/>">
+                                <button type="submit">remove</button>
                             </form>
                         </sec:authorize>
-                        
-                        <sec:authorize access="isAnonymous()">
-                            <div class="commentsTitle">
-                                <label>If you want to write a comment - please sign in</label>
-                            </div>
-                        </sec:authorize>
 
-                        <c:choose>
-                            <c:when test="${not empty post.comments}">
-                                <label class="commentsTitle">Comments:</label>
-                            </c:when>
-                            <c:otherwise>
-                                <label class="commentsTitle">No comments, make the first one!</label>
-                            </c:otherwise>
-                        </c:choose>
+                    </div>
+                </c:forEach>                    
 
-                        <sec:authorize access="isAuthenticated()">
-                            <form:form cssClass="addCommentForm" action="addComment" modelAttribute="addCommentFormBean" method="POST">
-                                <label class="title">Add new comment:</label>                            
-                                <form:errors cssClass="errorMessage" path="comment"/>                            
-                                <textarea class="commentTextArea" name="comment" maxlength="500"></textarea>
-                                <input type="hidden" name="postId" value="<c:out value="${post.id}"/>">
-                                <button type="submit">Add comment</button>
-                            </form:form>                        
-                        </sec:authorize>
-                        
-                        <c:if test="${not empty post.comments}">
-                            <c:forEach var="comment" items="${post.comments}">
-                                <div class="commentContainer">
-                                    <div class="header">
-                                        <div class="author">
-                                            <c:out value="${comment.author.username}"/>
-                                        </div>
-                                        <div class="date">
-                                            <c:out value="${comment.commentDate}" />
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <label><c:out value="${comment.content}"/></label>
-                                    </div>
-                                    <sec:authorize access="hasRole('ROLE_MODER')">
-                                        <form class="removeForm" action="removeComment" method="POST">
-                                            <input type="hidden" name="commentId" value="<c:out value="${comment.id}"/>">
-                                            <button type="submit">delete</button>
-                                        </form>
-                                    </sec:authorize>
-                                </div>							
-                            </c:forEach>
-                        </c:if>                       
-                    </c:if>
-                </div>	
             </div>
+
         </div>
 
-        <div id="clear"></div>
-        <div id="footer">
-            <div class="title">
-                <label>Jurgen</label>
-            </div>
-        </div>
+        <%@include file="parts/footer.jsp" %>
     </div>
 </body>
 </html>

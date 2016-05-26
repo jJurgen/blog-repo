@@ -1,4 +1,4 @@
-package com.jurgen.blog.sevice;
+package com.jurgen.blog.service;
 
 import com.jurgen.blog.dao.PostDao;
 import com.jurgen.blog.domain.Post;
@@ -9,7 +9,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate4.HibernateSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +23,27 @@ public class PostService {
 
     public PostService() {
         logger.debug("postService created");
+    }
+
+    public List<Post> getPostPage(int pageNumber, int pageSize) {
+//        List<Post> allPosts = postDao.getAllPostsSortedByDate();
+//        int checkingLimit = pageSize * (pageNumber - 1);
+//
+//        if (allPosts.size() <= checkingLimit || ((pageNumber <= 0) || (pageSize <= 0))) {
+//            throw new IllegalArgumentException("Incorrect input data");
+//        }
+//
+//        if ((allPosts.size() - checkingLimit) < pageSize) {
+//            return allPosts.subList(checkingLimit, allPosts.size());
+//        }
+//
+//        return allPosts.subList(checkingLimit, checkingLimit + pageSize);
+        System.out.println("Posts: " + postDao.countOfPosts());
+        return postDao.getPostsSortedByDate((pageNumber - 1) * pageSize, pageSize);
+    }
+
+    public long countOfPosts() {
+        return postDao.countOfPosts();
     }
 
     public List<Post> getRecentPosts(int amount) {
@@ -46,7 +66,7 @@ public class PostService {
         return postDao.searchByComments(req);
     }
 
-    public void updatePost(Integer postId, String content, String title) throws HibernateSystemException {
+    public void updatePost(Long postId, String content, String title) {
         Post post = postDao.get(postId);
         post.setTitle(title);
         post.setContent(content);
@@ -74,11 +94,11 @@ public class PostService {
         return postDao.getUsersPosts(user);
     }
 
-    public Post getPost(Integer id) {
+    public Post getPost(Long id) {
         return postDao.get(id);
     }
 
-    public Post getPostWithJoins(Integer id) {
+    public Post getPostWithJoins(Long id) {
         Post post = postDao.getPostWithJoins(id);
         if (post != null) {
             Collections.sort(post.getComments());

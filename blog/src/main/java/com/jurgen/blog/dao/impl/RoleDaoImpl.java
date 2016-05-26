@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component("roleDao")
-public class RoleDaoImpl extends GenericDaoImpl<UserRole, Integer> implements RoleDao {
+public class RoleDaoImpl extends GenericDaoImpl<UserRole, Long> implements RoleDao {
 
     private static Logger logger = LoggerFactory.getLogger(RoleDaoImpl.class);
 

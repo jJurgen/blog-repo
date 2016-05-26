@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component("postDao")
-public class PostDaoImpl extends GenericDaoImpl<Post, Integer> implements PostDao {
+public class PostDaoImpl extends GenericDaoImpl<Post, Long> implements PostDao {
 
     private static Logger logger = LoggerFactory.getLogger(PostDaoImpl.class);
 
@@ -28,11 +28,34 @@ public class PostDaoImpl extends GenericDaoImpl<Post, Integer> implements PostDa
 
     @Override
     public List<Post> getRecentPosts(int amount) {
-        Query query = getCurrentSession().createQuery("from Post order by postDate");
+        Query query = getCurrentSession().createQuery("from Post order by postDate desc");
         query.setMaxResults(amount);
         List<Post> posts = query.list();
         logger.debug("Recent posts obtained. Count: " + posts.size());
         return posts;
+    }
+
+    @Override
+    public List<Post> getAllPostsSortedByDate() {
+        Query query = getCurrentSession().createQuery("from Post order by postDate desc");
+        List<Post> posts = query.list();
+        logger.debug("All posts obtained and sorted by postDate. Count: " + posts.size());
+        return posts;
+    }
+
+    @Override
+    public List<Post> getPostsSortedByDate(int start, int count) {
+        Query query = getCurrentSession().createQuery("from Post order by postDate desc");
+        query.setFirstResult(start);
+        query.setMaxResults(count);
+        List<Post> posts = query.list();
+        logger.debug("Obtained " + posts.size() + " posts from position: " + start);
+        return posts;
+    }
+
+    @Override
+    public long countOfPosts() {
+        return ((Long) getCurrentSession().createQuery("select count(*) from Post").iterate().next());
     }
 
     @Override
@@ -73,7 +96,7 @@ public class PostDaoImpl extends GenericDaoImpl<Post, Integer> implements PostDa
     }
 
     @Override
-    public Post getPostWithJoins(Integer id) {
+    public Post getPostWithJoins(Long id) {
         Post post = get(id);
         if (post != null) {
             Hibernate.initialize(post.getComments());

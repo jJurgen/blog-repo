@@ -18,7 +18,7 @@ public class Comment implements Serializable, Comparable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false, length = 500)
     private String content;
@@ -46,11 +46,16 @@ public class Comment implements Serializable, Comparable {
         }
     }
 
-    public int getId() {
+    @Override
+    public String toString() {
+        return String.format("[comment: %s...]",content.substring(0, Math.min(10, content.length() - 1)));
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

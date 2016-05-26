@@ -7,7 +7,7 @@ public class AddCommentFormBean {
     @Size(min = 1, max = 500, message = "-length of comment must be from 1 to 500 characters")
     private String comment;
 
-    private Integer postId;
+    private Long postId;
 
     public AddCommentFormBean() {
     }
@@ -20,11 +20,11 @@ public class AddCommentFormBean {
         this.comment = comment;
     }
 
-    public Integer getPostId() {
+    public Long getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(Long postId) {
         this.postId = postId;
     }
 }

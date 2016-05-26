@@ -10,7 +10,7 @@ public class WritePostFormBean {
     @Size(min = 3, max = 3000, message = "-length of post must be from 3 to 3000 characters")
     private String content;
 
-    private Integer postId;
+    private Long postId;
 
     public WritePostFormBean() {
     }
@@ -31,11 +31,11 @@ public class WritePostFormBean {
         this.content = content;
     }
 
-    public Integer getPostId() {
+    public Long getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(Long postId) {
         this.postId = postId;
     }
 

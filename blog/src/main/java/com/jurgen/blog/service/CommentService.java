@@ -1,4 +1,4 @@
-package com.jurgen.blog.sevice;
+package com.jurgen.blog.service;
 
 import com.jurgen.blog.dao.CommentDao;
 import com.jurgen.blog.domain.Comment;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service(value = "commentService")
-@Transactional
+//@Transactional
 public class CommentService {
 
     @Autowired
@@ -30,7 +30,7 @@ public class CommentService {
 
     }
 
-    public Comment getComment(Integer id) {
+    public Comment getComment(Long id) {
         return commentDao.get(id);
     }
 

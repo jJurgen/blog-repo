@@ -2,7 +2,7 @@ package com.jurgen.blog.dao;
 
 import com.jurgen.blog.domain.User;
 
-public interface UserDao extends GenericDao<User, Integer> {
+public interface UserDao extends GenericDao<User, Long> {
 
     public boolean isUsernameExists(String username);
 
@@ -10,7 +10,7 @@ public interface UserDao extends GenericDao<User, Integer> {
 
     public User getUserByUsername(String username);
 
-    public User getUserWithJoins(Integer id);
+    public User getUserWithJoins(Long id);
 
     public User getUserWithJoins(String username);
 }

@@ -3,7 +3,7 @@ package com.jurgen.blog.controller;
 import com.jurgen.blog.domain.User;
 import com.jurgen.blog.formbeans.EditProfileFormBean;
 import com.jurgen.blog.formbeans.SignUpFormBean;
-import com.jurgen.blog.sevice.UserService;
+import com.jurgen.blog.service.UserService;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -67,7 +67,7 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/removeProfile", method = RequestMethod.POST)
-    public String removeProfile(@RequestParam("userId") Integer userId) {
+    public String removeProfile(@RequestParam("userId") Long userId) {
         logger.info("request for removing profile");
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userService.hasUserRole(user, "ROLE_ADMIN")) {

@@ -22,7 +22,7 @@ public class Post implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false, length = 200)
     private String title;
@@ -70,11 +70,16 @@ public class Post implements Serializable {
         return hash;
     }
 
-    public int getId() {
+    @Override
+    public String toString() {
+        return String.format("[post: title=%s]", title);
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

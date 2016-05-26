@@ -5,15 +5,14 @@ import com.jurgen.blog.domain.Post;
 import com.jurgen.blog.domain.User;
 import com.jurgen.blog.formbeans.AddCommentFormBean;
 import com.jurgen.blog.formbeans.WritePostFormBean;
-import com.jurgen.blog.sevice.CommentService;
-import com.jurgen.blog.sevice.PostService;
-import com.jurgen.blog.sevice.UserService;
+import com.jurgen.blog.service.CommentService;
+import com.jurgen.blog.service.PostService;
+import com.jurgen.blog.service.UserService;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,29 +30,31 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class PostController {
-    
+
+    private static final int POST_PER_PAGE = 10;
+
     @Autowired
     private PostService postService;
-    
+
     @Autowired
     private CommentService commentService;
-    
+
     @Resource(name = "userService")
     private UserService userService;
-    
+
     private final Logger logger = LoggerFactory.getLogger(PostController.class);
-    
+
     @RequestMapping(value = "/post", method = RequestMethod.GET)
     public String toPostpage() {
         logger.info("request for getting post page");
         return "post";
     }
-    
+
     @RequestMapping(value = "/post{postId}", method = RequestMethod.GET)
     public ModelAndView toPostpage(@PathVariable String postId, ModelAndView mav) {
         logger.info("request for getting post page. Post id: " + postId);
         try {
-            Integer id = Integer.parseInt(postId);
+            Long id = Long.parseLong(postId);
             Post post = postService.getPostWithJoins(id);
             if (post != null) {
                 mav.addObject("post", post);
@@ -68,7 +69,29 @@ public class PostController {
         mav.setViewName("post");
         return mav;
     }
-    
+
+    @RequestMapping(value = "/page{pageNumber}", method = RequestMethod.GET)
+    public ModelAndView getPostPage(@PathVariable String pageNumber, ModelAndView mav) {
+        logger.info("request for getting posts page #: " + pageNumber);
+        try {
+            Integer page = Integer.parseInt(pageNumber);
+            if (page <= 0 || page > getLastPageNumber()) {
+                page = 1;
+            }
+            List<Post> posts = postService.getPostPage(page, POST_PER_PAGE);
+
+            mav.addObject("posts", posts);
+            mav.addObject("currentPageNumber", page);
+            mav.addObject("lastPageNumber", getLastPageNumber());
+
+            mav.setViewName("home");
+        } catch (NumberFormatException ex) {
+            logger.debug("Incorrect pageNumber: " + ex.getMessage());
+            mav.setViewName("redirect:page1");
+        }
+        return mav;
+    }
+
     @RequestMapping(value = "/addComment", method = RequestMethod.POST)
     public ModelAndView addComment(@Valid @ModelAttribute("addCommentFormBean") AddCommentFormBean addCommentFormBean,
             BindingResult result, ModelAndView mav) {
@@ -91,7 +114,7 @@ public class PostController {
         mav.setViewName("redirect:home");
         return mav;
     }
-    
+
     @RequestMapping(value = {"/writePost", "/writepost"}, method = RequestMethod.GET)
     public String toWritePostPage(Model model) {
         logger.info("request for getting write-post page");
@@ -102,7 +125,7 @@ public class PostController {
         }
         return "writePost";
     }
-    
+
     @RequestMapping(value = "/writePost", method = RequestMethod.POST)
     public String writePost(@Valid @ModelAttribute("writePostFormBean") WritePostFormBean writePostFormBean,
             BindingResult result, Model model) {
@@ -119,11 +142,11 @@ public class PostController {
         }
         return "writePost";
     }
-    
+
     @RequestMapping(value = "/editPost", method = RequestMethod.POST)
     public ModelAndView editPost(@RequestParam(value = "postId") String postId, ModelAndView mav) {
         logger.info("request for editing post with id: " + postId);
-        Post currentPost = postService.getPostWithJoins(new Integer(postId));
+        Post currentPost = postService.getPostWithJoins(new Long(postId));
         if (currentPost != null) {
             mav.addObject("post", currentPost);
             mav.setViewName("editPost");
@@ -133,9 +156,9 @@ public class PostController {
         }
         return mav;
     }
-    
+
     @RequestMapping(value = "/removePost", method = RequestMethod.POST)
-    public String removePost(@RequestParam(value = "postId") Integer postId, Model model) {
+    public String removePost(@RequestParam(value = "postId") Long postId, Model model) {
         logger.info("request for removing post with id: " + postId);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (user != null) {
@@ -151,7 +174,7 @@ public class PostController {
         logger.info("post with id: " + postId + " didn't remove");
         return "redirect:home";
     }
-    
+
     @RequestMapping(value = "/updatePost", method = RequestMethod.POST)
     public String updatePost(@Valid @ModelAttribute("updatePostFormBean") WritePostFormBean updatePostFormBean,
             BindingResult result, Model model) {
@@ -166,7 +189,7 @@ public class PostController {
                 List<Post> posts = postService.getUsersPosts(user);
                 user.setPosts(posts);
             } catch (HibernateSystemException ex) {
-                logger.debug("post with id: " + updatePostFormBean.getPostId() + " wasn't updated. Message: " + ex.getMessage());                
+                logger.debug("post with id: " + updatePostFormBean.getPostId() + " wasn't updated. Message: " + ex.getMessage());
             }
         } else {
             logger.info("post with id: " + updatePostFormBean.getPostId() + " wasn't updated. There are " + result.getErrorCount() + " error(s)");
@@ -174,20 +197,20 @@ public class PostController {
         }
         return "redirect:post" + updatePostFormBean.getPostId();
     }
-    
+
     @RequestMapping(value = "/removeComment", method = RequestMethod.POST)
-    public String removeComment(@RequestParam("commentId") Integer commentId) {
+    public String removeComment(@RequestParam("commentId") Long commentId) {
         logger.info("request for removing comment with id:" + commentId);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userService.hasUserRole(user, "ROLE_MODER")) {
             Comment comment = commentService.getComment(commentId);
-            Integer postId = comment.getPost().getId();
+            Long postId = comment.getPost().getId();
             commentService.removeComment(comment);
             return "redirect:post" + postId;
         }
         return "redirect:home";
     }
-    
+
     @RequestMapping(value = "/doSearch", method = RequestMethod.GET)
     public String search(@RequestParam(value = "byTitle", required = false, defaultValue = "false") Boolean byTitle,
             @RequestParam(value = "byContent", required = false, defaultValue = "false") Boolean byContent,
@@ -214,5 +237,18 @@ public class PostController {
         }
         return "search";
     }
-    
+
+    private long getLastPageNumber() {
+        long lastPage = 0;
+
+        long postCount = postService.countOfPosts();
+        if (postCount % POST_PER_PAGE == 0) {
+            lastPage = postCount / POST_PER_PAGE;
+        } else {
+            lastPage = postCount / POST_PER_PAGE + 1;
+        }
+
+        return lastPage;
+    }
+
 }

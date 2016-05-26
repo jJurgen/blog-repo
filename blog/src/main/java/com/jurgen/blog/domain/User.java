@@ -33,7 +33,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false, length = 50)
     private String email;
@@ -61,7 +61,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments = new LinkedList<>();
 
-    public User() {
+    public User() {        
     }
 
     @Override
@@ -102,6 +102,11 @@ public class User implements UserDetails {
     }
 
     @Override
+    public String toString() {
+        return String.format("[user: username=%s]", username);
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -121,11 +126,11 @@ public class User implements UserDetails {
         return true;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Component("userDao")
-public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements UserDao {
+public class UserDaoImpl extends GenericDaoImpl<User, Long> implements UserDao {
 
     private static Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
@@ -47,7 +47,7 @@ public class UserDaoImpl extends GenericDaoImpl<User, Integer> implements UserDa
     }
 
     @Override
-    public User getUserWithJoins(Integer id) {
+    public User getUserWithJoins(Long id) {
         User user = get(id);
         if (user != null) {
             Hibernate.initialize(user.getPosts());
